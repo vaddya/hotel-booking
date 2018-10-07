@@ -31,30 +31,31 @@
 
 \subsection{Описание таблиц}
 
+В процессе проектирования схемы базы данных были выделены следующие сущности:
 \begin{itemize}
-	\item \code{Price} -- хранит информацию о цене \code{price} в период с \code{from} по \code{to} за сутки в номере с типом \code{room_type_id} (например, с 01.10.2018 по 31.10.2018 сутки проживания в номере с типом 123 стоят 4567 рублей).
+	\item \code{price} -- хранит информацию о цене \code{price} в период с \code{from} по \code{to} за сутки в номере с типом \code{room_type_id} (например, с 01.10.2018 по 31.10.2018 сутки проживания в номере с типом 123 стоят 4567 рублей).
 	
-	\item \code{RoomType} -- хранит информацию о типе номера \code{type} в отеле \code{hotel_id}: вместимость \code{capacity} и описание \code{description} (например, двухместный <<номер для некурящих с 2 кроватями размера king-size>> в отеле <<Гранд Будапешт>>).
+	\item \code{room_type} -- хранит информацию о типе номера \code{type} в отеле \code{hotel_id}: вместимость \code{capacity} и описание \code{description} (например, двухместный <<номер для некурящих с 2 кроватями размера king-size>> в отеле <<Гранд Будапешт>>).
 	
-	\item \code{RoomFacility} -- дополнительная таблица для создания отношения многие ко многим между типом номера \code{room_type_id} и предоставляемым удобством \code{facility_id}.
+	\item \code{room_facility} -- дополнительная таблица для создания отношения многие ко многим между типом номера \code{room_type_id} и предоставляемым удобством \code{facility_id}.
 	
-	\item \code{Facility} -- хранит информацию о предоставляемом в номере удобстве \code{name} (например, Wi-Fi).
+	\item \code{facility} -- хранит информацию о предоставляемом в номере удобстве \code{name} (например, Wi-Fi).
 	
-	\item \code{Hotel} -- хранит информацию об отеле \code{name}: внешний ключ на условия размещения \code{house_rules_id}, адрес \code{address}, количество звезд \code{stars} и текстовое описание \code{description}.
+	\item \code{hotel} -- хранит информацию об отеле \code{name}: внешний ключ на условия размещения \code{house_rules_id}, адрес \code{address}, количество звезд \code{stars} и текстовое описание \code{description}.
 	
-	\item \code{Room} -- хранит информацию о конкретных номерах с типом \code{room_type_id} (например, номер <<№123>> c типом <<номер для некурящих с 2 кроватями размера king-size>>).
+	\item \code{room} -- хранит информацию о конкретных номерах с типом \code{room_type_id} (например, номер <<№123>> c типом <<номер для некурящих с 2 кроватями размера king-size>>).
 	
-	\item \code{Reservation} -- хранит информацию о бронировании номера \code{room_id} пользователем \code{user_id} с \code{from} по \code{to}, итоговой цене проживания \code{price} и информацию о совершении платежа \code{is_paid}.
+	\item \code{reservation} -- хранит информацию о бронировании номера \code{room_id} пользователем \code{user_id} с \code{from} по \code{to}, итоговой цене проживания \code{price} и информацию о совершении платежа \code{is_paid}.
 	
-	\item \code{Cancellation} -- хранит информацию о статусе \code{status} отмены бронирования \code{reservation_id}.
+	\item \code{cancellation} -- хранит информацию о статусе \code{status} отмены бронирования \code{reservation_id}.
 	
-	\item \code{HouseRules} -- хранит информацию о правилах проживания в отеле: время заезда \code{checkin_from} и отъезда \code{checkout_until} (например, заезд после 15:00, отъезд до 12:00), политика отмены бронирования и возврата средств \code{cancellation_policy} (например, предоплата не возвращается при отмене бронирования меньше за сутки).
+	\item \code{house_rules} -- хранит информацию о правилах проживания в отеле: время заезда \code{checkin_from} и отъезда \code{checkout_until} (например, заезд после 15:00, отъезд до 12:00), политика отмены бронирования и возврата средств \code{cancellation_policy} (например, предоплата не возвращается при отмене бронирования меньше за сутки).
 	
-	\item \code{Review} -- хранит плюсы \code{advantages}, минусы \code{disadvantages} и итоговый рейтинг \code{rating} о проживании \code{reservation_id} (например, плюсы: вкусный завтрак, минусы: холодно, итоговый рейтинг: 3 из 5).
+	\item \code{review} -- хранит плюсы \code{advantages}, минусы \code{disadvantages} и итоговый рейтинг \code{rating} о проживании \code{reservation_id} (например, плюсы: вкусный завтрак, минусы: холодно, итоговый рейтинг: 3 из 5).
 	
-	\item \code{Guest} -- хранит имя гостя \code{name} и информацию о том, является ли он ребенком \code{is_child}, указанную при бронировании \code{reservation_id}.
+	\item \code{guest} -- хранит имя гостя \code{name} и информацию о том, является ли он ребенком \code{is_child}, указанную при бронировании \code{reservation_id}.
 	
-	\item \code{User} -- хранит имя \code{name}, электронную почту \code{email}, hash от пароля \code{password_hash} и номер телефона \code{phone_number} пользователя.
+	\item \code{user} -- хранит имя \code{name}, электронную почту \code{email}, hash от пароля \code{password_hash} и номер телефона \code{phone_number} пользователя.
 \end{itemize}
 
 \subsection{Структура базы данных}
