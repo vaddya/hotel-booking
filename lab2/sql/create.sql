@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS hotel (
     address        VARCHAR(256) NOT NULL,
     stars          SMALLINT     NOT NULL,
     description    TEXT,
-    FOREIGN KEY (house_tarules_id) REFERENCES house_rules (id)
+    FOREIGN KEY (house_rules_id) REFERENCES house_rules (id)
 );
 
 CREATE TABLE IF NOT EXISTS "user" (
