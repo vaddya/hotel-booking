@@ -11,6 +11,14 @@ public class Country {
 
     private String name;
 
+    public Country() {
+    }
+
+    public Country(char[] id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public char[] getId() {
         return id;
     }

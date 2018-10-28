@@ -7,7 +7,7 @@ import org.hibernate.Session;
 
 public abstract class EntityDao<E, I extends Serializable> implements Dao<E, I> {
 
-    protected Session session;
+    private Session session;
 
     protected abstract Class<E> getEntityClass();
 
@@ -20,10 +20,17 @@ public abstract class EntityDao<E, I extends Serializable> implements Dao<E, I> 
     }
 
     @Override
-    public void insert(E entity) {
+    public boolean insert(E entity) {
         session.beginTransaction();
-        session.save(entity);
-        session.getTransaction().commit();
+        try {
+            session.save(entity);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            session.getTransaction().rollback();
+            return false;
+        }
     }
 
     @Override
@@ -38,10 +45,17 @@ public abstract class EntityDao<E, I extends Serializable> implements Dao<E, I> 
     }
 
     @Override
-    public void update(E entity) {
+    public boolean update(E entity) {
         session.beginTransaction();
-        session.update(entity);
-        session.getTransaction().commit();
+        try {
+            session.update(entity);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            session.getTransaction().rollback();
+            return false;
+        }
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Hotel(String name, City city, HouseRules houseRules, String address, short stars, String description) {
+    public Hotel(String name, City city, HouseRules houseRules, String address, Short stars, String description) {
         this.name = name;
         this.city = city;
         this.houseRules = houseRules;
@@ -96,14 +96,14 @@ public class Hotel {
 
     @Override
     public String toString() {
-        return "Hotel{" +
+        return "Hotel{\n" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", city=" + city +
-                ", houseRules=" + houseRules +
-                ", address='" + address + '\'' +
-                ", stars=" + stars +
-                ", description='" + description + '\'' +
+                ",\nname='" + name + '\'' +
+                ",\ncity=" + city +
+                ",\nhouseRules=" + houseRules +
+                ",\naddress='" + address + '\'' +
+                ",\nstars=" + stars +
+                ",\ndescription='" + description + '\'' +
                 '}';
     }
 }

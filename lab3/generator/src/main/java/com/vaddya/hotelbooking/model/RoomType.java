@@ -1,7 +1,9 @@
 package com.vaddya.hotelbooking.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +33,7 @@ public class RoomType {
 
     private String description;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "room_facility",
             joinColumns = {@JoinColumn(name = "room_type_id")},
@@ -39,10 +41,11 @@ public class RoomType {
     )
     private Set<Facility> facilities;
 
-    @OneToMany(mappedBy = "roomType")
+    @OneToMany(mappedBy = "roomType", cascade = CascadeType.ALL)
     private Set<Price> prices;
 
     public RoomType() {
+        this.prices = new HashSet<>();
     }
 
     public RoomType(Hotel hotel, String type, Short capacity, String description, Set<Facility> facilities) {
@@ -51,6 +54,7 @@ public class RoomType {
         this.capacity = capacity;
         this.description = description;
         this.facilities = facilities;
+        this.prices = new HashSet<>();
     }
 
     public Long getId() {
@@ -109,14 +113,14 @@ public class RoomType {
 
     @Override
     public String toString() {
-        return "RoomType{" +
+        return "RoomType{\n" +
                 "id=" + id +
-                ", hotel=" + hotel +
-                ", type='" + type + '\'' +
-                ", capacity=" + capacity +
-                ", description='" + description + '\'' +
-                ", facilities=" + facilities +
-                ", prices=" + prices +
-                '}';
+                ",\nhotel=" + hotel +
+                ",\ntype='" + type + '\'' +
+                ",\ncapacity=" + capacity +
+                ",\ndescription='" + description + '\'' +
+                ",\nfacilities=" + facilities +
+                ",\nprices=" + prices +
+                "\n}";
     }
 }

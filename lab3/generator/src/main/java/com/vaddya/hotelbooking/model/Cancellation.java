@@ -22,8 +22,7 @@ public class Cancellation {
 
     private String status;
 
-    public Cancellation(Reservation reservation, String status) {
-        this.reservation = reservation;
+    public Cancellation(String status) {
         this.status = status;
     }
 

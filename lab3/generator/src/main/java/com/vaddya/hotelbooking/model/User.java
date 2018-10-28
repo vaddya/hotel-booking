@@ -34,10 +34,6 @@ public class User {
     public User() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     public User(String name, String email, char[] passwordHash, String phoneNumber, City city) {
         this.name = name;
         this.email = email;
@@ -46,6 +42,9 @@ public class User {
         this.city = city;
     }
 
+    public Integer getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -89,13 +88,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "User{\n" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", passwordHash=" + new String(passwordHash) +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", city=" + city +
-                '}';
+                ",\nname='" + name + '\'' +
+                ",\nemail='" + email + '\'' +
+                ",\npasswordHash=" + new String(passwordHash) +
+                ",\nphoneNumber='" + phoneNumber + '\'' +
+                ",\ncity=" + city +
+                "\n}";
     }
 }

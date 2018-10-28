@@ -2,6 +2,7 @@ package com.vaddya.hotelbooking.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -63,6 +64,19 @@ public class Reservation {
     private Set<BonusPenalty> bonusPenalties;
 
     public Reservation() {
+        this.guests = new HashSet<>();
+        this.bonusPenalties = new HashSet<>();
+    }
+
+    public Reservation(Room room, User user, Date from, Date to, BigDecimal price, Boolean isPaid) {
+        this.room = room;
+        this.user = user;
+        this.from = from;
+        this.to = to;
+        this.price = price;
+        this.isPaid = isPaid;
+        this.guests = new HashSet<>();
+        this.bonusPenalties = new HashSet<>();
     }
 
     public Long getId() {
@@ -169,18 +183,18 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "Reservation{\n" +
                 "id=" + id +
-                ", room=" + room +
-                ", user=" + user +
-                ", from=" + from +
-                ", to=" + to +
-                ", price=" + price +
-                ", isPaid=" + isPaid +
-                ", guests=" + guests +
-                ", cancellation=" + cancellation +
-                ", review=" + review +
-                ", bonusPenalties=" + bonusPenalties +
-                '}';
+                ",\nroom=" + room +
+                ",\nuser=" + user +
+                ",\nfrom=" + from +
+                ",\nto=" + to +
+                ",\nprice=" + price +
+                ",\nisPaid=" + isPaid +
+                ",\nguests=" + guests +
+                ",\ncancellation=" + cancellation +
+                ",\nreview=" + review +
+                ",\nbonusPenalties=" + bonusPenalties +
+                "\n}";
     }
 }

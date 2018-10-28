@@ -20,6 +20,14 @@ public class City {
 
     private String name;
 
+    public City() {
+    }
+
+    public City(Country country, String name) {
+        this.country = country;
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }

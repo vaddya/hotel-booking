@@ -30,8 +30,7 @@ public class Guest {
     public Guest() {
     }
 
-    public Guest(Reservation reservation, String name, Boolean isChild) {
-        this.reservation = reservation;
+    public Guest(String name, Boolean isChild) {
         this.name = name;
         this.isChild = isChild;
     }

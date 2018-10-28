@@ -50,10 +50,10 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" +
+        return "Room{\n" +
                 "id=" + id +
-                ", roomType=" + roomType +
-                ", name='" + name + '\'' +
-                '}';
+                ",\nroomType=" + roomType +
+                ",\nname='" + name + '\'' +
+                "\n}";
     }
 }

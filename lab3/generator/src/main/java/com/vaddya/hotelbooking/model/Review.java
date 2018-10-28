@@ -29,6 +29,12 @@ public class Review {
     public Review() {
     }
 
+    public Review(String advantages, String disadvantages, Short rating) {
+        this.advantages = advantages;
+        this.disadvantages = disadvantages;
+        this.rating = rating;
+    }
+
     public Long getId() {
         return id;
     }
@@ -87,11 +93,11 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" +
+        return "Review{\n" +
                 "id=" + id +
-                ", advantages='" + advantages + '\'' +
-                ", disadvantages='" + disadvantages + '\'' +
-                ", rating=" + rating +
-                '}';
+                ",\nadvantages='" + advantages + '\'' +
+                ",\ndisadvantages='" + disadvantages + '\'' +
+                ",\nrating=" + rating +
+                "\n}";
     }
 }
