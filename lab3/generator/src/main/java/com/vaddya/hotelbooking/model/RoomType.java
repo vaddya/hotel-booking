@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,7 +27,7 @@ public class RoomType {
 
     private String type;
 
-    private short capacity;
+    private Short capacity;
 
     private String description;
 
@@ -38,10 +39,13 @@ public class RoomType {
     )
     private Set<Facility> facilities;
 
+    @OneToMany(mappedBy = "roomType")
+    private Set<Price> prices;
+
     public RoomType() {
     }
 
-    public RoomType(Hotel hotel, String type, short capacity, String description, Set<Facility> facilities) {
+    public RoomType(Hotel hotel, String type, Short capacity, String description, Set<Facility> facilities) {
         this.hotel = hotel;
         this.type = type;
         this.capacity = capacity;
@@ -69,11 +73,11 @@ public class RoomType {
         this.type = type;
     }
 
-    public short getCapacity() {
+    public Short getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(short capacity) {
+    public void setCapacity(Short capacity) {
         this.capacity = capacity;
     }
 
@@ -93,6 +97,16 @@ public class RoomType {
         this.facilities = facilities;
     }
 
+    public void addPrice(Price price) {
+        price.setRoomType(this);
+        this.prices.add(price);
+    }
+
+    public void removePrice(Price price) {
+        price.setRoomType(null);
+        this.prices.remove(price);
+    }
+
     @Override
     public String toString() {
         return "RoomType{" +
@@ -102,6 +116,7 @@ public class RoomType {
                 ", capacity=" + capacity +
                 ", description='" + description + '\'' +
                 ", facilities=" + facilities +
+                ", prices=" + prices +
                 '}';
     }
 }

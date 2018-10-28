@@ -1,18 +1,17 @@
 package com.vaddya.hotelbooking.generator;
 
-import com.vaddya.hotelbooking.dao.FacilityDao;
-import com.vaddya.hotelbooking.model.Facility;
+import com.vaddya.hotelbooking.dao.RoomTypeDao;
+import com.vaddya.hotelbooking.model.RoomType;
 
 public class HibernateTest {
 
-    private static FacilityDao dao = new FacilityDao();
+    private static RoomTypeDao dao = new RoomTypeDao();
 
     public static void main(String[] args) {
         var session = HibernateSessionFactory.getSessionFactory().openSession();
         dao.setSession(session);
-        for (Facility f : dao.findAll()) {
-            System.out.println(f);
-        }
+        RoomType rt = dao.find(1L);
+        System.out.println(rt);
         HibernateSessionFactory.shutdown();
     }
 

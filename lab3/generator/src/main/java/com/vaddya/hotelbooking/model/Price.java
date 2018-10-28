@@ -1,8 +1,12 @@
 package com.vaddya.hotelbooking.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,26 +22,23 @@ public class Price {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_type_id")
     private RoomType roomType;
 
+    @Column(name = "`from`")
     private Date from;
 
+    @Column(name = "`to`")
     private Date to;
 
-    @ColumnTransformer(
-            forColumn = "price",
-            read = "price::money::numeric::float8",
-            write = "?::float8::numeric::money"
-    )
-    private float price;
+    @ColumnTransformer(read = "price::money::numeric", write = "?::numeric::money")
+    private BigDecimal price;
 
     public Price() {
     }
 
-    public Price(RoomType roomType, Date from, Date to, float price) {
-        this.roomType = roomType;
+    public Price(Date from, Date to, BigDecimal price) {
         this.from = from;
         this.to = to;
         this.price = price;
@@ -71,19 +72,38 @@ public class Price {
         this.to = to;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Price price1 = (Price) o;
+        return Objects.equals(id, price1.id) &&
+                Objects.equals(from, price1.from) &&
+                Objects.equals(to, price1.to) &&
+                Objects.equals(price, price1.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, from, to, price);
     }
 
     @Override
     public String toString() {
         return "Price{" +
                 "id=" + id +
-                ", roomType=" + roomType +
                 ", from=" + from +
                 ", to=" + to +
                 ", price=" + price +

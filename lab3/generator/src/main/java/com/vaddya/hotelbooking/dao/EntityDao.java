@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-public abstract class DefaultDao<E, I extends Serializable> implements Dao<E, I> {
+public abstract class EntityDao<E, I extends Serializable> implements Dao<E, I> {
 
     protected Session session;
 
@@ -38,9 +38,9 @@ public abstract class DefaultDao<E, I extends Serializable> implements Dao<E, I>
     }
 
     @Override
-    public void save(E entity) {
+    public void update(E entity) {
         session.beginTransaction();
-        session.save(entity);
+        session.update(entity);
         session.getTransaction().commit();
     }
 

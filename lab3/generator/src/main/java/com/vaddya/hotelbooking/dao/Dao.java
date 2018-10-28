@@ -12,7 +12,7 @@ public interface Dao<E, I extends Serializable> {
 
     List<E> findAll();
 
-    void save(E t);
+    void update(E t);
 
     void delete(I id);
 }

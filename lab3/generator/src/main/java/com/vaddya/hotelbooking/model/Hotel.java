@@ -26,7 +26,7 @@ public class Hotel {
 
     private String address;
 
-    private short stars;
+    private Short stars;
 
     private String description;
 
@@ -78,11 +78,11 @@ public class Hotel {
         this.address = address;
     }
 
-    public short getStars() {
+    public Short getStars() {
         return stars;
     }
 
-    public void setStars(short stars) {
+    public void setStars(Short stars) {
         this.stars = stars;
     }
 
