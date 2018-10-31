@@ -28,6 +28,8 @@ public class EntityGenerator {
 
     private static Faker faker = new Faker(new Locale("ru"));
 
+    private static Calendar cal = Calendar.getInstance();
+
     private static BigDecimal randomPrice() {
         return BigDecimal.valueOf(faker.random().nextLong(15000));
     }
@@ -35,6 +37,7 @@ public class EntityGenerator {
     private static Short randomStars() {
         return faker.random().nextInt(1, 5).shortValue();
     }
+
 
     public static BonusPenalty bonusPenalty() {
         return new BonusPenalty(
@@ -88,17 +91,12 @@ public class EntityGenerator {
     }
 
     public static HouseRules houseRules() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2018, Calendar.JANUARY, 1, 9, 0);
-        Date from = cal.getTime();
-        cal.add(Calendar.HOUR, 3);
-        Date to = cal.getTime();
-        Date checkoutUntil = faker.date().between(from, to);
+        Date checkoutUntil = new Date();
+        checkoutUntil.setHours(faker.random().nextInt(9, 12));
         checkoutUntil.setMinutes(0);
         checkoutUntil.setSeconds(0);
-        Date checkinFrom = faker.date().future(6, TimeUnit.HOURS, checkoutUntil);
-        checkinFrom.setMinutes(0);
-        checkinFrom.setSeconds(0);
+        Date checkinFrom = new Date(checkoutUntil.getTime());
+        checkinFrom.setHours(faker.random().nextInt(12, 15));
         return new HouseRules(
                 DateUtils.toSqlTime(checkinFrom),
                 DateUtils.toSqlTime(checkoutUntil),
@@ -107,10 +105,9 @@ public class EntityGenerator {
     }
 
     public static Price price() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2018, Calendar.JANUARY, 1);
+        cal.set(2017, Calendar.JANUARY, 1);
         Date from = cal.getTime();
-        cal.add(Calendar.MONTH, 24);
+        cal.add(Calendar.MONTH, 36);
         Date to = cal.getTime();
         Date randomFrom = faker.date().between(from, to);
         Date randomTo = faker.date().future(20, TimeUnit.DAYS, randomFrom);
@@ -122,10 +119,9 @@ public class EntityGenerator {
     }
 
     public static Reservation reservation(Room room, User user) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(2018, Calendar.JANUARY, 1);
+        cal.set(2017, Calendar.JANUARY, 1);
         Date from = cal.getTime();
-        cal.add(Calendar.MONTH, 11);
+        cal.add(Calendar.MONTH, 36);
         Date to = cal.getTime();
         Date randomFrom = faker.date().between(from, to);
         Date randomTo = faker.date().future(20, TimeUnit.DAYS, randomFrom);
@@ -141,8 +137,8 @@ public class EntityGenerator {
 
     public static Review review() {
         return new Review(
-                faker.lorem().paragraph(2),
-                faker.lorem().paragraph(2),
+                faker.lorem().paragraph(),
+                faker.lorem().paragraph(),
                 randomStars()
         );
     }

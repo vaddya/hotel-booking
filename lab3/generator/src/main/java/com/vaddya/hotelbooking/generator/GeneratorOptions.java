@@ -16,20 +16,21 @@ public class GeneratorOptions {
     private final Option clusterOption = new Option("c", "cluster", true, "cluster type: [city | hotel | reservation]");
     private final Option clusterNumberOption = new Option("n", "number", true, "base number of cluster, default 1000");
 
-    private final Option bonusPenaltyOption = new Option("b", "bonus-penalties", true, "number of bonus or penalties, default: 20");
-    private final Option cancellationOption = new Option("l", "cancellations", true, "number of cancellations, default: 5000");
-    private final Option cityOption = new Option("i", "cities", true, "number of cities, default: 200");
-    private final Option countryOption = new Option("o", "counties", true, "number of countries, default: 10");
-    private final Option facilityOption = new Option("f", "facilities", true, "number of facilities, default: 100");
-    private final Option guestOption = new Option("g", "guests", true, "number of guests, default: 20000");
-    private final Option hotelOption = new Option("h", "hotels", true, "number of hotels, default: 1000");
-    private final Option houseRulesOption = new Option("s", "house-rules", true, "number of house rules, default: 500");
-    private final Option priceOption = new Option("p", "prices", true, "number of prices, default: 50000");
-    private final Option reservationOption = new Option("v", "reservations", true, "number of reservations, default: 10000");
-    private final Option reviewOption = new Option("w", "reviews", true, "number of reviews, default: 3000");
-    private final Option roomOption = new Option("r", "rooms", true, "number of rooms, default: 30000");
-    private final Option roomTypeOption = new Option("t", "room-types", true, "number of room types, default: 3000");
-    private final Option userOption = new Option("u", "users", true, "number of users, default: 5000");
+    private final Option allOption = new Option("a", "all", false, "generate all entities");
+    private final Option bonusPenaltiesOption = new Option("b", "bonus-penalties", true, "number of bonus or penalties, default: 20");
+    private final Option cancellationsOption = new Option("l", "cancellations", true, "number of cancellations, default: 5000");
+    private final Option citiesOption = new Option("i", "cities", true, "number of cities, default: 200");
+    private final Option countriesOption = new Option("o", "counties", true, "number of countries, default: 10");
+    private final Option facilitiesOption = new Option("f", "facilities", true, "number of facilities, default: 100");
+    private final Option guestsOption = new Option("g", "guests", true, "number of guests, default: 20000");
+    private final Option hotelsOption = new Option("h", "hotels", true, "number of hotels, default: 500");
+    private final Option houseRulesOption = new Option("s", "house-rules", true, "number of house rules, default: 250");
+    private final Option pricesOption = new Option("p", "prices", true, "number of prices, default: 10000");
+    private final Option reservationsOption = new Option("v", "reservations", true, "number of reservations, default: 10000");
+    private final Option reviewsOption = new Option("w", "reviews", true, "number of reviews, default: 3000");
+    private final Option roomsOption = new Option("r", "rooms", true, "number of rooms, default: 5000");
+    private final Option roomTypesOption = new Option("t", "room-types", true, "number of room types, default: 500");
+    private final Option usersOption = new Option("u", "users", true, "number of users, default: 5000");
 
     private final Option minBonusPenaltiesPerReservation = new Option(null, "min-bp", true, "minimum number of bonuses or penalties per reservation, default: 0");
     private final Option maxBonusPenaltiesPerReservation = new Option(null, "max-bp", true, "maximum number of bonuses or penalties per reservation, default: 3");
@@ -46,20 +47,25 @@ public class GeneratorOptions {
                 .addOption(helpOption)
                 .addOption(clusterOption)
                 .addOption(clusterNumberOption)
-                .addOption(bonusPenaltyOption)
-                .addOption(cancellationOption)
-                .addOption(cityOption)
-                .addOption(countryOption)
-                .addOption(facilityOption)
-                .addOption(guestOption)
-                .addOption(hotelOption)
+                .addOption(allOption)
+                .addOption(bonusPenaltiesOption)
+                .addOption(cancellationsOption)
+                .addOption(citiesOption)
+                .addOption(countriesOption)
+                .addOption(facilitiesOption)
+                .addOption(guestsOption)
+                .addOption(hotelsOption)
                 .addOption(houseRulesOption)
-                .addOption(priceOption)
-                .addOption(reservationOption)
-                .addOption(reviewOption)
-                .addOption(roomOption)
-                .addOption(roomTypeOption)
-                .addOption(userOption);
+                .addOption(pricesOption)
+                .addOption(reservationsOption)
+                .addOption(reviewsOption)
+                .addOption(roomsOption)
+                .addOption(roomTypesOption)
+                .addOption(usersOption)
+                .addOption(minBonusPenaltiesPerReservation)
+                .addOption(maxBonusPenaltiesPerReservation)
+                .addOption(minFacilitiesPerRoom)
+                .addOption(maxFacilitiesPerRoom);
         cli = new DefaultParser().parse(options, args);
         formatter = new HelpFormatter();
     }
@@ -70,67 +76,127 @@ public class GeneratorOptions {
 
     public Optional<ClusterOptions> getClusterOption() {
         var opt = clusterOption.getOpt();
-        return cli.hasOption(opt) ? Optional.of(ClusterOptions.valueOf(cli.getOptionValue(opt))) : Optional.empty();
+        return cli.hasOption(opt) ? Optional.of(ClusterOptions.valueOf(cli.getOptionValue(opt).toUpperCase())) : Optional.empty();
     }
 
     public int getClusterBaseNumber() {
         return ifElse(clusterNumberOption, 1000);
     }
 
+    public boolean hasAllOption() {
+        return cli.hasOption(allOption.getOpt());
+    }
+
+    public boolean hasBonusPenalties() {
+        return cli.hasOption(bonusPenaltiesOption.getOpt());
+    }
+
     public int getBonusPenalties() {
-        return ifElse(bonusPenaltyOption, 100);
+        return ifElse(bonusPenaltiesOption, 100);
+    }
+
+    public boolean hasFacilities() {
+        return cli.hasOption(facilitiesOption.getOpt());
     }
 
     public int getFacilities() {
-        return ifElse(facilityOption, 100);
+        return ifElse(facilitiesOption, 100);
+    }
+
+    public boolean hasGuests() {
+        return cli.hasOption(guestsOption.getOpt());
     }
 
     public int getGuests() {
-        return ifElse(guestOption, 20000);
+        return ifElse(guestsOption, 20000);
+    }
+
+    public boolean hasHotels() {
+        return cli.hasOption(hotelsOption.getOpt());
     }
 
     public int getHotels() {
-        return ifElse(hotelOption, 1000);
+        return ifElse(hotelsOption, 500);
+    }
+
+    public boolean hasCities() {
+        return cli.hasOption(citiesOption.getOpt());
     }
 
     public int getCities() {
-        return ifElse(cityOption, 200);
+        return ifElse(citiesOption, 200);
+    }
+
+    public boolean hasCancellations() {
+        return cli.hasOption(cancellationsOption.getOpt());
     }
 
     public int getCancellation() {
-        return ifElse(cancellationOption, 5000);
+        return ifElse(cancellationsOption, 5000);
+    }
+
+    public boolean hasCountries() {
+        return cli.hasOption(countriesOption.getOpt());
     }
 
     public int getCountries() {
-        return ifElse(countryOption, 10);
+        return ifElse(countriesOption, 10);
+    }
+
+    public boolean hasPrices() {
+        return cli.hasOption(pricesOption.getOpt());
     }
 
     public int getPrices() {
-        return ifElse(priceOption, 50000);
+        return ifElse(pricesOption, 10000);
+    }
+
+    public boolean hasRooms() {
+        return cli.hasOption(roomsOption.getOpt());
     }
 
     public int getRooms() {
-        return ifElse(roomOption, 30000);
+        return ifElse(roomsOption, 5000);
+    }
+
+    public boolean hasHouseRules() {
+        return cli.hasOption(houseRulesOption.getOpt());
     }
 
     public int getHouseRules() {
-        return ifElse(houseRulesOption, 500);
+        return ifElse(houseRulesOption, 250);
+    }
+
+    public boolean hasRoomTypes() {
+        return cli.hasOption(roomTypesOption.getOpt());
     }
 
     public int getRoomTypes() {
-        return ifElse(roomTypeOption, 3000);
+        return ifElse(roomTypesOption, 500);
+    }
+
+    public boolean hasUsers() {
+        return cli.hasOption(usersOption.getOpt());
     }
 
     public int getUsers() {
-        return ifElse(userOption, 5000);
+        return ifElse(usersOption, 5000);
+    }
+
+    public boolean hasReservations() {
+        return cli.hasOption(reservationsOption.getOpt());
     }
 
     public int getReservations() {
-        return ifElse(reservationOption, 10000);
+        return ifElse(reservationsOption, 10000);
+    }
+
+    public boolean hasReviews() {
+        return cli.hasOption(reviewsOption.getOpt());
     }
 
     public int getReviews() {
-        return ifElse(reviewOption, 3000);
+        return ifElse(reviewsOption, 3000);
     }
 
     public int getMinBonusPenalties() {
@@ -154,7 +220,14 @@ public class GeneratorOptions {
     }
 
     private int ifElse(Option opt, int n) {
-        return cli.hasOption(opt.getOpt()) ? Integer.parseInt(cli.getOptionValue(opt.getOpt())) : n;
+        if (opt.getOpt() == null) {
+            return cli.hasOption(opt.getLongOpt())
+                    ? Integer.parseInt(cli.getOptionValue(opt.getOpt()))
+                    : n;
+        }
+        return cli.hasOption(opt.getOpt()) || cli.hasOption(opt.getLongOpt())
+                ? Integer.parseInt(cli.getOptionValue(opt.getOpt()))
+                : n;
     }
 
 }

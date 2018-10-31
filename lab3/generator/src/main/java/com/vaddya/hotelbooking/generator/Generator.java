@@ -3,7 +3,9 @@ package com.vaddya.hotelbooking.generator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.vaddya.hotelbooking.dao.BonusPenaltyDao;
@@ -40,15 +42,18 @@ public class Generator {
     private static final RoomTypeDao roomTypeDao = new RoomTypeDao();
     private static final UserDao userDao = new UserDao();
 
-    private static final Random random = new Random();
+    private static final Random random = new Random(System.currentTimeMillis());
+    private static final Logger logger = Logger.getLogger(Generator.class);
 
     public static void main(String[] args) {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         try (var session = HibernateSessionFactory.getSessionFactory().openSession()) {
             GeneratorOptions options = new GeneratorOptions(args);
-            if (options.hasHelpOption()) {
+            if (options.hasHelpOption() || args.length == 0) {
                 options.printHelp();
                 return;
             }
+
             var cluster = options.getClusterOption();
             if (cluster.isPresent()) {
                 var number = options.getClusterBaseNumber();
@@ -56,6 +61,7 @@ public class Generator {
                 case CITY:
                     generateCountries(session, number / 20 + 1);
                     generateCities(session, number);
+                    generateUsers(session, number * 10);
                     break;
                 case HOTEL:
                     generateFacilities(session, 100);
@@ -74,21 +80,51 @@ public class Generator {
                 }
                 return;
             }
-            generateCountries(session, options.getCountries());
-            generateCities(session, options.getCities());
-            generateFacilities(session, options.getFacilities());
-            generateHouseRules(session, options.getHouseRules());
-            generateHotels(session, options.getHotels());
-            generateRoomTypes(session, options.getRoomTypes(), options.getMinFacilities(), options.getMaxFacilities());
-            generateRooms(session, options.getRooms());
-            generateUsers(session, options.getUsers());
-            generateBonusPenalties(session, options.getBonusPenalties());
-            generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties());
-            generateGuests(session, options.getGuests());
-            generateCancellations(session, options.getCancellation());
-            generateReviews(session, options.getReviews());
+
+            if (options.hasCountries() || options.hasAllOption()) {
+                generateCountries(session, options.getCountries());
+            }
+            if (options.hasCities() || options.hasAllOption()) {
+                generateCities(session, options.getCities());
+            }
+            if (options.hasFacilities() || options.hasAllOption()) {
+                generateFacilities(session, options.getFacilities());
+            }
+            if (options.hasHouseRules() || options.hasAllOption()) {
+                generateHouseRules(session, options.getHouseRules());
+            }
+            if (options.hasHotels() || options.hasAllOption()) {
+                generateHotels(session, options.getHotels());
+            }
+            if (options.hasRoomTypes() || options.hasAllOption()) {
+                generateRoomTypes(session, options.getRoomTypes(), options.getMinFacilities(), options.getMaxFacilities());
+            }
+            if (options.hasRooms() || options.hasAllOption()) {
+                generateRooms(session, options.getRooms());
+            }
+            if (options.hasPrices() || options.hasAllOption()) {
+                generatePrices(session, options.getPrices());
+            }
+            if (options.hasUsers() || options.hasAllOption()) {
+                generateUsers(session, options.getUsers());
+            }
+            if (options.hasBonusPenalties() || options.hasAllOption()) {
+                generateBonusPenalties(session, options.getBonusPenalties());
+            }
+            if (options.hasReservations() || options.hasAllOption()) {
+                generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties());
+            }
+            if (options.hasGuests() || options.hasAllOption()) {
+                generateGuests(session, options.getGuests());
+            }
+            if (options.hasCancellations() || options.hasAllOption()) {
+                generateCancellations(session, options.getCancellation());
+            }
+            if (options.hasReviews() || options.hasAllOption()) {
+                generateReviews(session, options.getReviews());
+            }
         } catch (Exception e) {
-            System.err.println(e.toString());
+            e.printStackTrace();
         } finally {
             HibernateSessionFactory.shutdown();
         }
@@ -99,7 +135,7 @@ public class Generator {
     }
 
     private static void log(String format, Object... args) {
-        System.out.println(String.format(format, args));
+        logger.info(String.format(format, args));
     }
 
     private static void generateBonusPenalties(Session session, int count) {
