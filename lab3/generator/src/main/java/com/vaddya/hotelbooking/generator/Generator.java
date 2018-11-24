@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
@@ -47,13 +48,18 @@ public class Generator {
 
     public static void main(String[] args) {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        try (var session = HibernateSessionFactory.getSessionFactory().openSession()) {
-            GeneratorOptions options = new GeneratorOptions(args);
+        GeneratorOptions options;
+        try {
+            options = new GeneratorOptions(args);
             if (options.hasHelpOption() || args.length == 0) {
                 options.printHelp();
                 return;
             }
-
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+        try (var session = HibernateSessionFactory.getSessionFactory().openSession()) {
             var cluster = options.getClusterOption();
             if (cluster.isPresent()) {
                 var number = options.getClusterBaseNumber();

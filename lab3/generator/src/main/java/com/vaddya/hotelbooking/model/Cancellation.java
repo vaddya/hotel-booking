@@ -23,6 +23,9 @@ public class Cancellation {
 
     private String status;
 
+    public Cancellation() {
+    }
+
     public Cancellation(String status) {
         this.status = status;
     }
