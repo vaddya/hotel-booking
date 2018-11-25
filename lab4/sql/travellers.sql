@@ -31,8 +31,3 @@ FROM summary
          FROM reservation
          GROUP BY user_id
      ) AS total ON total.user_id = usr.id;
-
-SELECT *
-FROM reservation
-WHERE user_id = 578 AND is_paid
-ORDER BY "from";

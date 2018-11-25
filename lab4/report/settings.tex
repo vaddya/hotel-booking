@@ -1,6 +1,6 @@
 \documentclass[a4paper,14pt]{extarticle}
 
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[russian]{babel}
 \usepackage{hyperref}
@@ -22,6 +22,8 @@
 \usepackage{enumitem}
 \usepackage{cmap}
 \usepackage{underscore}
+\usepackage{pgfplotstable}
+\usepackage{listingsutf8}
 
 \definecolor{green}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -31,7 +33,7 @@
 
 \lstset{
 	language={SQL},
-	inputpath={../sql/},
+	inputpath={../},
 	backgroundcolor=\color{white},
 	commentstyle=\color{green},
 	keywordstyle=\color{blue},
@@ -49,11 +51,11 @@
 	showtabs=false,
 	tabsize=4,
 	frame=single,
-	morekeywords={WITH, IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES, COUNT, SUM, OVER},
+	morekeywords={WITH, IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES, COUNT, SUM, OVER, AVG},
 	deletekeywords={count, error},
 	sensitive=true,
-	extendedchars=false,
-	columns=fullflexible
+	columns=fullflexible,
+	inputencoding=utf8/cp1251
 }
 
 \renewcommand{\le}{\ensuremath{\leqslant}}
@@ -65,6 +67,10 @@
 \renewcommand{\thefigure}{\arabic{figure}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\caret}{\^{}}
+\newcommand{\sql}[1]{
+	\lstinputlisting[caption=\code{#1.sql}]{sql/#1.sql}
+	\lstinputlisting[language=]{data/#1.txt}
+}
 
 \titleformat*{\section}{\large\bfseries} 
 \titleformat*{\subsection}{\normalsize\bfseries} 
@@ -84,5 +90,5 @@
 \setlength\parindent{5ex}
 \titlelabel{\thetitle.\quad}
 
-\setitemize{topsep=0.5em, itemsep=0em}
-\setenumerate{topsep=0.5em, itemsep=0em}
+\setitemize{topsep=0em, itemsep=0em}
+\setenumerate{topsep=0em, itemsep=0em}
