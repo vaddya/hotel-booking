@@ -15,7 +15,7 @@ WITH summary AS (
            quarter                                                           AS quarter,
            SUM(count)                                                        AS reservations
     FROM quarter_summary
-    GROUP BY quarter, city_id
+    GROUP BY city_id, quarter
 )
 SELECT summary.quarter      AS quarter,
        city.name            AS city_name,

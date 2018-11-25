@@ -6,10 +6,7 @@ INSERT INTO hotel
 VALUES (DEFAULT, 'Гранд Будапешт', 1, 'Республика Зубровка', 5, 'Комфортабельный отель Гранд Будапешт');
 
 INSERT INTO "user"
-VALUES (DEFAULT,
-        'traveller',
-        'traveller@travel.com',
-        '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8');
+VALUES (DEFAULT, 'traveller', 'traveller@travel.com', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8');
 
 INSERT INTO room_type
 VALUES (DEFAULT, 1, 'double king-size', 2, 'Номер для некурящих с 2 кроватями размера king-size'),

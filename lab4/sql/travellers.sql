@@ -21,7 +21,7 @@ WITH summary AS (
     ORDER BY avg_diff DESC
     LIMIT 5
 )
-SELECT usr.id, usr.name, usr.email, usr.phone_number, reservations, total, avg_diff
+SELECT usr.id, usr.name, reservations, total, avg_diff
 FROM summary
      JOIN "user" AS usr ON user_id = usr.id
      JOIN (

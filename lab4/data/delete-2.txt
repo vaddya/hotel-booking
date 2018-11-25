@@ -1,0 +1,11 @@
+  id  | name 
+------+------
+ 1003 | test
+ 1004 | test
+(2 rows)
+
+DELETE 2
+ id | name 
+----+------
+(0 rows)
+
