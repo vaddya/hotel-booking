@@ -1,6 +1,5 @@
 package com.vaddya.hotelbooking.generator;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -26,29 +25,35 @@ import com.vaddya.hotelbooking.utils.DateUtils;
 
 public class EntityGenerator {
 
-    private static Faker faker = new Faker(new Locale("ru"));
+    public static Faker faker = new Faker(new Locale("en"));
 
     private static Calendar cal = Calendar.getInstance();
 
-    private static BigDecimal randomPrice() {
-        return BigDecimal.valueOf(faker.random().nextLong(15000));
-    }
+    private static Date checkoutUntil;
+    private static Date checkinFrom;
 
-    private static Short randomStars() {
-        return faker.random().nextInt(1, 5).shortValue();
-    }
+    public static Date systemFrom;
+    public static Date systemTo;
 
+    static {
+        cal.set(2017, Calendar.JANUARY, 1, 0, 0, 0);
+        checkoutUntil = cal.getTime();
+        checkinFrom = cal.getTime();
+        systemFrom = cal.getTime();
+        cal.set(2018, Calendar.DECEMBER, 31);
+        systemTo = cal.getTime();
+    }
 
     public static BonusPenalty bonusPenalty() {
         return new BonusPenalty(
                 faker.lorem().sentence(10),
-                randomPrice()
+                RandomUtils.randomPrice()
         );
     }
 
     public static Cancellation cancellation() {
         return new Cancellation(
-                faker.gameOfThrones().dragon().toUpperCase()
+                RandomUtils.random(Constants.cancelStatuses)
         );
     }
 
@@ -68,14 +73,14 @@ public class EntityGenerator {
 
     public static Facility facility() {
         return new Facility(
-                faker.book().title()
+                faker.weather().description()
         );
     }
 
     public static Guest guest() {
         return new Guest(
                 faker.name().name(),
-                faker.bool().bool()
+                RandomUtils.random.nextInt(5) == 0
         );
     }
 
@@ -85,77 +90,76 @@ public class EntityGenerator {
                 city,
                 houseRules,
                 faker.address().streetAddress(),
-                randomStars(),
+                RandomUtils.randomShort(),
                 faker.lorem().paragraph()
         );
     }
 
     public static HouseRules houseRules() {
-        Date checkoutUntil = new Date();
         checkoutUntil.setHours(faker.random().nextInt(9, 12));
-        checkoutUntil.setMinutes(0);
-        checkoutUntil.setSeconds(0);
-        Date checkinFrom = new Date(checkoutUntil.getTime());
         checkinFrom.setHours(faker.random().nextInt(12, 15));
         return new HouseRules(
                 DateUtils.toSqlTime(checkinFrom),
                 DateUtils.toSqlTime(checkoutUntil),
-                faker.lorem().sentence(10)
+                faker.lorem().sentence()
         );
     }
 
-    public static Price price() {
-        cal.set(2017, Calendar.JANUARY, 1);
-        Date from = cal.getTime();
-        cal.add(Calendar.MONTH, 36);
-        Date to = cal.getTime();
-        Date randomFrom = faker.date().between(from, to);
-        Date randomTo = faker.date().future(20, TimeUnit.DAYS, randomFrom);
+    public static Price initialPrice() {
+        return price(systemFrom);
+    }
+
+    public static Price nextPrice(Price price) {
+        Date date = price.getTo();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        return price(cal.getTime());
+    }
+
+    public static Price price(Date from) {
+        Date randomTo = faker.date().future(365, TimeUnit.DAYS, from);
         return new Price(
-                DateUtils.toSqlDate(randomFrom),
+                DateUtils.toSqlDate(from),
                 DateUtils.toSqlDate(randomTo),
-                randomPrice()
+                RandomUtils.randomPrice()
         );
     }
 
     public static Reservation reservation(Room room, User user) {
-        cal.set(2017, Calendar.JANUARY, 1);
-        Date from = cal.getTime();
-        cal.add(Calendar.MONTH, 36);
-        Date to = cal.getTime();
-        Date randomFrom = faker.date().between(from, to);
+        Date randomFrom = faker.date().between(systemFrom, systemTo);
         Date randomTo = faker.date().future(20, TimeUnit.DAYS, randomFrom);
         return new Reservation(
                 room,
                 user,
                 DateUtils.toSqlDate(randomFrom),
                 DateUtils.toSqlDate(randomTo),
-                randomPrice(),
-                faker.bool().bool()
+                RandomUtils.randomPrice(),
+                RandomUtils.random.nextInt(10) != 0
         );
     }
 
     public static Review review() {
         return new Review(
-                faker.lorem().paragraph(),
-                faker.lorem().paragraph(),
-                randomStars()
+                faker.gameOfThrones().quote(),
+                faker.hobbit().quote(),
+                RandomUtils.randomShort()
         );
     }
 
     public static Room room(RoomType roomType) {
         return new Room(
                 roomType,
-                faker.gameOfThrones().house()
+                faker.book().title()
         );
     }
 
     public static RoomType roomType(Hotel hotel, Set<Facility> facilities) {
+        Constants.RoomTypeInfo roomType = RandomUtils.random(Constants.roomTypes);
         return new RoomType(
                 hotel,
-                faker.ancient().god(),
-                randomStars(),
-                faker.lorem().sentence(10),
+                roomType.getType(),
+                roomType.getCapacity(),
+                roomType.getDescription(),
                 facilities
         );
     }

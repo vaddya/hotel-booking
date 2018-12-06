@@ -101,6 +101,10 @@ public class RoomType {
         this.facilities = facilities;
     }
 
+    public Set<Price> getPrices() {
+        return prices;
+    }
+
     public void addPrice(Price price) {
         price.setRoomType(this);
         this.prices.add(price);

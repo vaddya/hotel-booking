@@ -1,7 +1,6 @@
 package com.vaddya.hotelbooking.generator;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -25,6 +24,9 @@ import com.vaddya.hotelbooking.dao.RoomTypeDao;
 import com.vaddya.hotelbooking.dao.UserDao;
 import com.vaddya.hotelbooking.model.Country;
 import com.vaddya.hotelbooking.model.Facility;
+
+import static com.vaddya.hotelbooking.generator.RandomUtils.random;
+import static com.vaddya.hotelbooking.generator.RandomUtils.randomByPredicate;
 
 public class Generator {
 
@@ -75,7 +77,7 @@ public class Generator {
                     generateHotels(session, number);
                     generateRoomTypes(session, number * 10, 5, 15);
                     generateRooms(session, number * 50);
-                    generatePrices(session, number * 100);
+                    generatePrices(session);
                     break;
                 case RESERVATION:
                     generateBonusPenalties(session, 20);
@@ -109,7 +111,7 @@ public class Generator {
                 generateRooms(session, options.getRooms());
             }
             if (options.hasPrices() || options.hasAllOption()) {
-                generatePrices(session, options.getPrices());
+                generatePrices(session);
             }
             if (options.hasUsers() || options.hasAllOption()) {
                 generateUsers(session, options.getUsers());
@@ -134,10 +136,6 @@ public class Generator {
         } finally {
             HibernateSessionFactory.shutdown();
         }
-    }
-
-    private static <T> T random(List<T> list) {
-        return list.get(random.nextInt(list.size()));
     }
 
     private static void log(String format, Object... args) {
@@ -165,7 +163,7 @@ public class Generator {
                 log("generating cancellations: %d/%d", i, count);
             }
             var cancellation = EntityGenerator.cancellation();
-            var reservation = random(reservations);
+            var reservation = randomByPredicate(reservations, r -> r.getCancellation() == null);
             cancellation.setReservation(reservation);
             cancellationDao.insert(cancellation);
         }
@@ -256,18 +254,24 @@ public class Generator {
         log("done with house rules");
     }
 
-    private static void generatePrices(Session session, int count) {
+    private static void generatePrices(Session session) {
         priceDao.setSession(session);
         roomTypeDao.setSession(session);
         var roomTypes = roomTypeDao.findAll();
-        for (int i = 0; i < count; i++) {
+        int i = 0;
+        for (var roomType : roomTypes) {
             if (i % 100 == 0) {
-                log("generating prices: %d/%d", i, count);
+                log("generating prices: %d", i);
             }
-            var price = EntityGenerator.price();
-            var roomType = random(roomTypes);
+            var price = EntityGenerator.initialPrice();
             price.setRoomType(roomType);
             priceDao.insert(price);
+            while (price.getTo().before(EntityGenerator.systemTo)) {
+                price = EntityGenerator.nextPrice(price);
+                price.setRoomType(roomType);
+                priceDao.insert(price);
+            }
+            i++;
         }
         log("done with prices");
     }
@@ -306,7 +310,7 @@ public class Generator {
                 log("generating reviews: %d/%d", i, count);
             }
             var review = EntityGenerator.review();
-            var reservation = random(reservations);
+            var reservation = randomByPredicate(reservations, r -> r.getReview() == null);
             review.setReservation(reservation);
             reviewDao.insert(review);
         }
@@ -336,7 +340,7 @@ public class Generator {
         var facilities = facilityDao.findAll();
         for (int i = 0; i < count; i++) {
             if (i % 100 == 0) {
-                log("generating room types: %d/%d", i, count);
+                log("generating room roomTypes: %d/%d", i, count);
             }
             var hotel = random(hotels);
             var facility = new HashSet<Facility>();
@@ -347,7 +351,7 @@ public class Generator {
             var roomType = EntityGenerator.roomType(hotel, facility);
             roomTypeDao.insert(roomType);
         }
-        log("done with room types");
+        log("done with room roomTypes");
     }
 
     private static void generateUsers(Session session, int count) {

@@ -33,7 +33,8 @@ public class Price {
     @Column(name = "`to`")
     private Date to;
 
-    @ColumnTransformer(read = "price::money::numeric", write = "?::numeric::money")
+    @Column(columnDefinition = "money")
+    @ColumnTransformer(read = "price::money", write = "?::numeric::money")
     private BigDecimal price;
 
     public Price() {

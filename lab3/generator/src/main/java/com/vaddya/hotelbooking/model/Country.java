@@ -1,5 +1,6 @@
 package com.vaddya.hotelbooking.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,6 +8,7 @@ import javax.persistence.Id;
 public class Country {
 
     @Id
+    @Column(columnDefinition = "bpchar")
     private char[] id;
 
     private String name;

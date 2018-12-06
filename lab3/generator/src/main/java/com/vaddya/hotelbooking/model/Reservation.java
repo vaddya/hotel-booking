@@ -41,6 +41,7 @@ public class Reservation {
     @Column(name = "`to`")
     private Date to;
 
+    @Column(columnDefinition = "money")
     @ColumnTransformer(read = "price::money::numeric", write = "?::numeric::money")
     private BigDecimal price;
 

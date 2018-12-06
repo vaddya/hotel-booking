@@ -3,6 +3,7 @@ package com.vaddya.hotelbooking.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,8 @@ public class BonusPenalty {
 
     private String condition;
 
-    @ColumnTransformer(read = "price::money::numeric", write = "?::numeric::money")
+    @Column(columnDefinition = "money")
+    @ColumnTransformer(read = "price::money", write = "?::numeric::money")
     private BigDecimal price;
 
     public BonusPenalty() {

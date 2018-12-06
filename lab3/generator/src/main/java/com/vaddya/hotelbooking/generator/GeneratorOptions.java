@@ -25,11 +25,11 @@ public class GeneratorOptions {
     private final Option guestsOption = new Option("g", "guests", true, "number of guests, default: 20000");
     private final Option hotelsOption = new Option("h", "hotels", true, "number of hotels, default: 500");
     private final Option houseRulesOption = new Option("s", "house-rules", true, "number of house rules, default: 250");
-    private final Option pricesOption = new Option("p", "prices", true, "number of prices, default: 10000");
+    private final Option pricesOption = new Option("p", "prices", false, "generate prices for room types");
     private final Option reservationsOption = new Option("v", "reservations", true, "number of reservations, default: 10000");
     private final Option reviewsOption = new Option("w", "reviews", true, "number of reviews, default: 3000");
     private final Option roomsOption = new Option("r", "rooms", true, "number of rooms, default: 5000");
-    private final Option roomTypesOption = new Option("t", "room-types", true, "number of room types, default: 500");
+    private final Option roomTypesOption = new Option("t", "room-roomTypes", true, "number of room roomTypes, default: 500");
     private final Option usersOption = new Option("u", "users", true, "number of users, default: 5000");
 
     private final Option minBonusPenaltiesPerReservation = new Option(null, "min-bp", true, "minimum number of bonuses or penalties per reservation, default: 0");
@@ -145,10 +145,6 @@ public class GeneratorOptions {
 
     public boolean hasPrices() {
         return cli.hasOption(pricesOption.getOpt());
-    }
-
-    public int getPrices() {
-        return ifElse(pricesOption, 10000);
     }
 
     public boolean hasRooms() {
