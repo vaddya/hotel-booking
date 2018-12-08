@@ -23,7 +23,7 @@ public class BonusPenalty {
     private String condition;
 
     @Column(columnDefinition = "money")
-    @ColumnTransformer(read = "price::money", write = "?::numeric::money")
+    @ColumnTransformer(read = "price::money::numeric", write = "?::numeric::money")
     private BigDecimal price;
 
     public BonusPenalty() {

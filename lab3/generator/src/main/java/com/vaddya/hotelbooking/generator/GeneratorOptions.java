@@ -17,23 +17,23 @@ public class GeneratorOptions {
     private final Option clusterNumberOption = new Option("n", "number", true, "base number of cluster, default 1000");
 
     private final Option allOption = new Option("a", "all", false, "generate all entities");
-    private final Option bonusPenaltiesOption = new Option("b", "bonus-penalties", true, "number of bonus or penalties, default: 20");
-    private final Option cancellationsOption = new Option("l", "cancellations", true, "number of cancellations, default: 5000");
-    private final Option citiesOption = new Option("i", "cities", true, "number of cities, default: 200");
+    private final Option bonusPenaltiesOption = new Option("b", "bonus-penalties", true, "number of bonuses or penalties, default: 20");
+    private final Option cancellationsOption = new Option("l", "cancellations", true, "number of cancellations, default: 100");
+    private final Option citiesOption = new Option("i", "cities", true, "number of cities, default: 100");
     private final Option countriesOption = new Option("o", "counties", true, "number of countries, default: 10");
     private final Option facilitiesOption = new Option("f", "facilities", true, "number of facilities, default: 100");
     private final Option guestsOption = new Option("g", "guests", true, "number of guests, default: 20000");
-    private final Option hotelsOption = new Option("h", "hotels", true, "number of hotels, default: 500");
+    private final Option hotelsOption = new Option("h", "hotels", true, "number of hotels, default: 50");
     private final Option houseRulesOption = new Option("s", "house-rules", true, "number of house rules, default: 250");
     private final Option pricesOption = new Option("p", "prices", false, "generate prices for room types");
-    private final Option reservationsOption = new Option("v", "reservations", true, "number of reservations, default: 10000");
+    private final Option reservationsOption = new Option("v", "reservations", true, "number of reservations, default: 50000");
     private final Option reviewsOption = new Option("w", "reviews", true, "number of reviews, default: 3000");
-    private final Option roomsOption = new Option("r", "rooms", true, "number of rooms, default: 5000");
-    private final Option roomTypesOption = new Option("t", "room-roomTypes", true, "number of room roomTypes, default: 500");
+    private final Option roomsOption = new Option("r", "rooms", true, "number of rooms, default: 1000");
+    private final Option roomTypesOption = new Option("t", "room-types", true, "number of room-types, default: 500");
     private final Option usersOption = new Option("u", "users", true, "number of users, default: 5000");
 
     private final Option minBonusPenaltiesPerReservation = new Option(null, "min-bp", true, "minimum number of bonuses or penalties per reservation, default: 0");
-    private final Option maxBonusPenaltiesPerReservation = new Option(null, "max-bp", true, "maximum number of bonuses or penalties per reservation, default: 3");
+    private final Option maxBonusPenaltiesPerReservation = new Option(null, "max-bp", true, "maximum number of bonuses or penalties per reservation, default: 2");
 
     private final Option minFacilitiesPerRoom = new Option(null, "min-facilities", true, "minimum number of facilities per room, default 10");
     private final Option maxFacilitiesPerRoom = new Option(null, "max-facilities", true, "maximum number of facilities per room, default 30");
@@ -116,7 +116,7 @@ public class GeneratorOptions {
     }
 
     public int getHotels() {
-        return ifElse(hotelsOption, 500);
+        return ifElse(hotelsOption, 50);
     }
 
     public boolean hasCities() {
@@ -124,7 +124,7 @@ public class GeneratorOptions {
     }
 
     public int getCities() {
-        return ifElse(citiesOption, 200);
+        return ifElse(citiesOption, 100);
     }
 
     public boolean hasCancellations() {
@@ -184,7 +184,7 @@ public class GeneratorOptions {
     }
 
     public int getReservations() {
-        return ifElse(reservationsOption, 10000);
+        return ifElse(reservationsOption, 50000);
     }
 
     public boolean hasReviews() {
