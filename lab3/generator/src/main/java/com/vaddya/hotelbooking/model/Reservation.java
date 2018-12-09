@@ -24,7 +24,7 @@ import org.hibernate.annotations.ColumnTransformer;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_id_seq")
     private Long id;
 
     @ManyToOne
@@ -48,13 +48,13 @@ public class Reservation {
     @Column(name = "is_paid")
     private Boolean isPaid;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private Set<Guest> guests;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
     private Cancellation cancellation;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
     private Review review;
 
     @ManyToMany(cascade = CascadeType.ALL)

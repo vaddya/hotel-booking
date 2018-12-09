@@ -9,16 +9,13 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.vaddya.hotelbooking.dao.BonusPenaltyDao;
-import com.vaddya.hotelbooking.dao.CancellationDao;
 import com.vaddya.hotelbooking.dao.CityDao;
 import com.vaddya.hotelbooking.dao.CountryDao;
 import com.vaddya.hotelbooking.dao.FacilityDao;
-import com.vaddya.hotelbooking.dao.GuestDao;
 import com.vaddya.hotelbooking.dao.HotelDao;
 import com.vaddya.hotelbooking.dao.HouseRulesDao;
 import com.vaddya.hotelbooking.dao.PriceDao;
 import com.vaddya.hotelbooking.dao.ReservationDao;
-import com.vaddya.hotelbooking.dao.ReviewDao;
 import com.vaddya.hotelbooking.dao.RoomDao;
 import com.vaddya.hotelbooking.dao.RoomTypeDao;
 import com.vaddya.hotelbooking.dao.UserDao;
@@ -31,16 +28,13 @@ import static com.vaddya.hotelbooking.generator.RandomUtils.randomByPredicate;
 public class Generator {
 
     private static final BonusPenaltyDao bonusPenaltyDao = new BonusPenaltyDao();
-    private static final CancellationDao cancellationDao = new CancellationDao();
     private static final CityDao cityDao = new CityDao();
     private static final CountryDao countryDao = new CountryDao();
-    private static final GuestDao guestDao = new GuestDao();
     private static final FacilityDao facilityDao = new FacilityDao();
     private static final HouseRulesDao houseRulesDao = new HouseRulesDao();
     private static final HotelDao hotelDao = new HotelDao();
     private static final PriceDao priceDao = new PriceDao();
     private static final ReservationDao reservationDao = new ReservationDao();
-    private static final ReviewDao reviewDao = new ReviewDao();
     private static final RoomDao roomDao = new RoomDao();
     private static final RoomTypeDao roomTypeDao = new RoomTypeDao();
     private static final UserDao userDao = new UserDao();
@@ -155,7 +149,6 @@ public class Generator {
     }
 
     private static void generateCancellations(Session session, int count) {
-        cancellationDao.setSession(session);
         reservationDao.setSession(session);
         var reservations = reservationDao.findAll();
         for (int i = 0; i < count; i++) {
@@ -164,8 +157,8 @@ public class Generator {
             }
             var cancellation = EntityGenerator.cancellation();
             var reservation = randomByPredicate(reservations, r -> r.getCancellation() == null);
-            cancellation.setReservation(reservation);
-            cancellationDao.insert(cancellation);
+            reservation.setCancellation(cancellation);
+            reservationDao.insert(reservation);
         }
         log("done with cancellations");
     }
@@ -209,7 +202,6 @@ public class Generator {
     }
 
     private static void generateGuests(Session session, int count) {
-        guestDao.setSession(session);
         reservationDao.setSession(session);
         var reservations = reservationDao.findAll();
         for (int i = 0; i < count; i++) {
@@ -219,7 +211,8 @@ public class Generator {
             var guest = EntityGenerator.guest();
             var reservation = random(reservations);
             guest.setReservation(reservation);
-            guestDao.insert(guest);
+            reservation.addGuest(guest);
+            reservationDao.insert(reservation);
         }
         log("done with guests");
     }
@@ -307,7 +300,6 @@ public class Generator {
     }
 
     private static void generateReviews(Session session, int count) {
-        reviewDao.setSession(session);
         reservationDao.setSession(session);
         var reservations = reservationDao.findAll();
         for (int i = 0; i < count; i++) {
@@ -316,8 +308,8 @@ public class Generator {
             }
             var review = EntityGenerator.review();
             var reservation = randomByPredicate(reservations, r -> r.getReview() == null);
-            review.setReservation(reservation);
-            reviewDao.insert(review);
+            reservation.setReview(review);
+            reservationDao.insert(reservation);
         }
         log("done with reviews");
     }
