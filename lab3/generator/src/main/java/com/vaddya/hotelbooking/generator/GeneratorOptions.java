@@ -11,6 +11,12 @@ import org.apache.commons.cli.ParseException;
 
 public class GeneratorOptions {
 
+    public enum Cluster {
+        CITY,
+        HOTEL,
+        RESERVATION
+    }
+
     private final Option helpOption = new Option("?", "help", false, "print help");
 
     private final Option clusterOption = new Option("c", "cluster", true, "cluster type: [city | hotel | reservation]");
@@ -22,14 +28,14 @@ public class GeneratorOptions {
     private final Option citiesOption = new Option("i", "cities", true, "number of cities, default: 100");
     private final Option countriesOption = new Option("o", "counties", true, "number of countries, default: 10");
     private final Option facilitiesOption = new Option("f", "facilities", true, "number of facilities, default: 100");
-    private final Option guestsOption = new Option("g", "guests", true, "number of guests, default: 20000");
+    private final Option guestsOption = new Option("g", "guests", false, "generate guests");
     private final Option hotelsOption = new Option("h", "hotels", true, "number of hotels, default: 50");
     private final Option houseRulesOption = new Option("s", "house-rules", true, "number of house rules, default: 250");
     private final Option pricesOption = new Option("p", "prices", false, "generate prices for room types");
     private final Option reservationsOption = new Option("v", "reservations", true, "number of reservations, default: 50000");
-    private final Option reviewsOption = new Option("w", "reviews", true, "number of reviews, default: 3000");
+    private final Option reviewsOption = new Option("w", "reviews", true, "number of reviews, default: 20000");
     private final Option roomsOption = new Option("r", "rooms", true, "number of rooms, default: 1000");
-    private final Option roomTypesOption = new Option("t", "room-types", true, "number of room-types, default: 500");
+    private final Option roomTypesOption = new Option("t", "room-types", false, "generate room types");
     private final Option usersOption = new Option("u", "users", true, "number of users, default: 5000");
 
     private final Option minBonusPenaltiesPerReservation = new Option(null, "min-bp", true, "minimum number of bonuses or penalties per reservation, default: 0");
@@ -74,9 +80,9 @@ public class GeneratorOptions {
         return cli.hasOption(helpOption.getOpt());
     }
 
-    public Optional<ClusterOptions> getClusterOption() {
+    public Optional<Cluster> getClusterOption() {
         var opt = clusterOption.getOpt();
-        return cli.hasOption(opt) ? Optional.of(ClusterOptions.valueOf(cli.getOptionValue(opt).toUpperCase())) : Optional.empty();
+        return cli.hasOption(opt) ? Optional.of(Cluster.valueOf(cli.getOptionValue(opt).toUpperCase())) : Optional.empty();
     }
 
     public int getClusterBaseNumber() {
@@ -105,10 +111,6 @@ public class GeneratorOptions {
 
     public boolean hasGuests() {
         return cli.hasOption(guestsOption.getOpt());
-    }
-
-    public int getGuests() {
-        return ifElse(guestsOption, 20000);
     }
 
     public boolean hasHotels() {
@@ -167,10 +169,6 @@ public class GeneratorOptions {
         return cli.hasOption(roomTypesOption.getOpt());
     }
 
-    public int getRoomTypes() {
-        return ifElse(roomTypesOption, 500);
-    }
-
     public boolean hasUsers() {
         return cli.hasOption(usersOption.getOpt());
     }
@@ -192,7 +190,7 @@ public class GeneratorOptions {
     }
 
     public int getReviews() {
-        return ifElse(reviewsOption, 3000);
+        return ifElse(reviewsOption, 20000);
     }
 
     public int getMinBonusPenalties() {

@@ -1,19 +1,9 @@
 package com.vaddya.hotelbooking.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,50 +14,24 @@ public class RoomType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "hotel_id")
-    private Hotel hotel;
-
     private String type;
 
     private Short capacity;
 
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "room_facility",
-            joinColumns = {@JoinColumn(name = "room_type_id")},
-            inverseJoinColumns = {@JoinColumn(name = "facility_id")}
-    )
-    private Set<Facility> facilities;
-
-    @OneToMany(mappedBy = "roomType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Price> prices;
-
     public RoomType() {
-        this.prices = new HashSet<>();
+
     }
 
-    public RoomType(Hotel hotel, String type, Short capacity, String description, Set<Facility> facilities) {
-        this.hotel = hotel;
+    public RoomType(String type, Short capacity, String description) {
         this.type = type;
         this.capacity = capacity;
         this.description = description;
-        this.facilities = facilities;
-        this.prices = new HashSet<>();
     }
 
     public Long getId() {
         return id;
-    }
-
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
     }
 
     public String getType() {
@@ -94,38 +58,13 @@ public class RoomType {
         this.description = description;
     }
 
-    public Set<Facility> getFacilities() {
-        return facilities;
-    }
-
-    public void setFacilities(Set<Facility> facilities) {
-        this.facilities = facilities;
-    }
-
-    public Set<Price> getPrices() {
-        return prices;
-    }
-
-    public void addPrice(Price price) {
-        price.setRoomType(this);
-        this.prices.add(price);
-    }
-
-    public void removePrice(Price price) {
-        price.setRoomType(null);
-        this.prices.remove(price);
-    }
-
     @Override
     public String toString() {
         return "RoomType{\n" +
                 "id=" + id +
-                ",\nhotel=" + hotel +
                 ",\ntype='" + type + '\'' +
                 ",\ncapacity=" + capacity +
                 ",\ndescription='" + description + '\'' +
-                ",\nfacilities=" + facilities +
-                ",\nprices=" + prices +
                 "\n}";
     }
 }

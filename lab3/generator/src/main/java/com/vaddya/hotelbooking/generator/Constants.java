@@ -4,8 +4,6 @@ public class Constants {
 
     public static String[] cancelStatuses = {"REQUESTED", "IN_PROGRESS", "REJECTED", "COMPLETED"};
 
-    public static String[] statuses = {"REQUESTED", "IN_PROGRESS", "REJECTED", "COMPLETED"};
-
     public static RoomTypeInfo[] roomTypes = {
             RoomTypeInfo.of("Single", 1, "A room assigned to one person."),
             RoomTypeInfo.of("Double", 2, "A room assigned to two people"),

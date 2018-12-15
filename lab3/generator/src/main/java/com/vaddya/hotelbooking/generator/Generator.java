@@ -14,13 +14,13 @@ import com.vaddya.hotelbooking.dao.CountryDao;
 import com.vaddya.hotelbooking.dao.FacilityDao;
 import com.vaddya.hotelbooking.dao.HotelDao;
 import com.vaddya.hotelbooking.dao.HouseRulesDao;
-import com.vaddya.hotelbooking.dao.PriceDao;
 import com.vaddya.hotelbooking.dao.ReservationDao;
 import com.vaddya.hotelbooking.dao.RoomDao;
 import com.vaddya.hotelbooking.dao.RoomTypeDao;
 import com.vaddya.hotelbooking.dao.UserDao;
 import com.vaddya.hotelbooking.model.Country;
 import com.vaddya.hotelbooking.model.Facility;
+import com.vaddya.hotelbooking.model.Price;
 
 import static com.vaddya.hotelbooking.generator.RandomUtils.random;
 import static com.vaddya.hotelbooking.generator.RandomUtils.randomByPredicate;
@@ -31,9 +31,8 @@ public class Generator {
     private static final CityDao cityDao = new CityDao();
     private static final CountryDao countryDao = new CountryDao();
     private static final FacilityDao facilityDao = new FacilityDao();
-    private static final HouseRulesDao houseRulesDao = new HouseRulesDao();
     private static final HotelDao hotelDao = new HotelDao();
-    private static final PriceDao priceDao = new PriceDao();
+    private static final HouseRulesDao houseRulesDao = new HouseRulesDao();
     private static final ReservationDao reservationDao = new ReservationDao();
     private static final RoomDao roomDao = new RoomDao();
     private static final RoomTypeDao roomTypeDao = new RoomTypeDao();
@@ -69,16 +68,14 @@ public class Generator {
                     generateFacilities(session, 100);
                     generateHouseRules(session, number / 2 + 1);
                     generateHotels(session, number);
-                    generateRoomTypes(session, number * 10, 5, 15);
-                    generateRooms(session, number * 50);
-                    generatePrices(session);
+                    generateRoomTypes(session);
+                    generateRooms(session, number * 50, 5, 15, true);
                     break;
                 case RESERVATION:
                     generateBonusPenalties(session, 20);
-                    generateReservations(session, number, 0, 3);
+                    generateReservations(session, number, 0, 3, true);
                     generateCancellations(session, number / 4 + 1);
                     generateReviews(session, number / 4 + 1);
-                    generateGuests(session, number * 2);
                 }
                 return;
             }
@@ -99,13 +96,10 @@ public class Generator {
                 generateHotels(session, options.getHotels());
             }
             if (options.hasRoomTypes() || options.hasAllOption()) {
-                generateRoomTypes(session, options.getRoomTypes(), options.getMinFacilities(), options.getMaxFacilities());
+                generateRoomTypes(session);
             }
             if (options.hasRooms() || options.hasAllOption()) {
-                generateRooms(session, options.getRooms());
-            }
-            if (options.hasPrices() || options.hasAllOption()) {
-                generatePrices(session);
+                generateRooms(session, options.getRooms(), options.getMinFacilities(), options.getMaxFacilities(), options.hasPrices());
             }
             if (options.hasUsers() || options.hasAllOption()) {
                 generateUsers(session, options.getUsers());
@@ -114,10 +108,7 @@ public class Generator {
                 generateBonusPenalties(session, options.getBonusPenalties());
             }
             if (options.hasReservations() || options.hasAllOption()) {
-                generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties());
-            }
-            if (options.hasGuests() || options.hasAllOption()) {
-                generateGuests(session, options.getGuests());
+                generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties(), options.hasGuests());
             }
             if (options.hasCancellations() || options.hasAllOption()) {
                 generateCancellations(session, options.getCancellation());
@@ -201,22 +192,6 @@ public class Generator {
         log("done with facilities");
     }
 
-    private static void generateGuests(Session session, int count) {
-        reservationDao.setSession(session);
-        var reservations = reservationDao.findAll();
-        for (int i = 0; i < count; i++) {
-            if (i % 100 == 0) {
-                log("generating guests: %d/%d", i, count);
-            }
-            var guest = EntityGenerator.guest();
-            var reservation = random(reservations);
-            guest.setReservation(reservation);
-            reservation.addGuest(guest);
-            reservationDao.insert(reservation);
-        }
-        log("done with guests");
-    }
-
     private static void generateHotels(Session session, int count) {
         hotelDao.setSession(session);
         cityDao.setSession(session);
@@ -247,32 +222,7 @@ public class Generator {
         log("done with house rules");
     }
 
-    private static void generatePrices(Session session) {
-        priceDao.setSession(session);
-        roomTypeDao.setSession(session);
-        var roomTypes = roomTypeDao.findAll();
-        int i = 0;
-        for (var roomType : roomTypes) {
-            if (i % 100 == 0) {
-                log("generating prices: %d", i);
-            }
-            if (!roomType.getPrices().isEmpty()) {
-                continue;
-            }
-            var price = EntityGenerator.initialPrice();
-            price.setRoomType(roomType);
-            priceDao.insert(price);
-            while (price.getTo().before(EntityGenerator.systemTo)) {
-                price = EntityGenerator.nextPrice(price);
-                price.setRoomType(roomType);
-                priceDao.insert(price);
-            }
-            i++;
-        }
-        log("done with prices");
-    }
-
-    private static void generateReservations(Session session, int count, int minBonusPenalties, int maxBonusPenalties) {
+    private static void generateReservations(Session session, int count, int minBonusPenalties, int maxBonusPenalties, boolean genGuest) {
         reservationDao.setSession(session);
         roomDao.setSession(session);
         userDao.setSession(session);
@@ -292,6 +242,12 @@ public class Generator {
                         random.nextInt(maxBonusPenalties - minBonusPenalties);
                 for (int j = 0; j < numberOfBonusPenalties; j++) {
                     reservation.addBonusPenalty(random(bonusPenalties));
+                }
+            }
+            if (genGuest) {
+                for (int j = 0; j < random.nextInt(3) + 1; j++) {
+                    var guest = EntityGenerator.guest();
+                    reservation.addGuest(guest);
                 }
             }
             reservationDao.insert(reservation);
@@ -314,38 +270,44 @@ public class Generator {
         log("done with reviews");
     }
 
-    private static void generateRooms(Session session, int count) {
+    private static void generateRooms(Session session, int count, int minFacilities, int maxFacilities, boolean genPrices) {
         roomDao.setSession(session);
+        hotelDao.setSession(session);
         roomTypeDao.setSession(session);
+        facilityDao.setSession(session);
+        var hotels = hotelDao.findAll();
         var roomTypes = roomTypeDao.findAll();
+        var facilities = facilityDao.findAll();
         for (int i = 0; i < count; i++) {
             if (i % 100 == 0) {
                 log("generating rooms: %d/%d", i, count);
             }
-            var roomType = random(roomTypes);
-            var room = EntityGenerator.room(roomType);
-            roomDao.insert(room);
-        }
-        log("done with rooms");
-    }
-
-    private static void generateRoomTypes(Session session, int count, int minFacilities, int maxFacilities) {
-        roomTypeDao.setSession(session);
-        hotelDao.setSession(session);
-        facilityDao.setSession(session);
-        var hotels = hotelDao.findAll();
-        var facilities = facilityDao.findAll();
-        for (int i = 0; i < count; i++) {
-            if (i % 100 == 0) {
-                log("generating room types: %d/%d", i, count);
-            }
             var hotel = random(hotels);
+            var roomType = random(roomTypes);
             var facility = new HashSet<Facility>();
             var numberOfFacilities = minFacilities + random.nextInt(maxFacilities - minFacilities);
             for (int j = 0; j < numberOfFacilities; j++) {
                 facility.add(random(facilities));
             }
-            var roomType = EntityGenerator.roomType(hotel, facility);
+            var prices = new HashSet<Price>();
+            if (genPrices) {
+                var price = EntityGenerator.initialPrice();
+                while (price.getTo().before(EntityGenerator.systemTo)) {
+                    price = EntityGenerator.nextPrice(price);
+                    prices.add(price);
+                }
+            }
+            var room = EntityGenerator.room(hotel, roomType, facility, prices);
+            roomDao.insert(room);
+        }
+        log("done with rooms");
+    }
+
+    private static void generateRoomTypes(Session session) {
+        roomTypeDao.setSession(session);
+        log("generating room types");
+        var roomTypes = EntityGenerator.roomTypes();
+        for (var roomType : roomTypes) {
             roomTypeDao.insert(roomType);
         }
         log("done with room types");

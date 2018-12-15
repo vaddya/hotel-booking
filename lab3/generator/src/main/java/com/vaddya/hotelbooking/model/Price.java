@@ -24,8 +24,8 @@ public class Price {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "room_type_id")
-    private RoomType roomType;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @Column(name = "`from`")
     private Date from;
@@ -50,12 +50,12 @@ public class Price {
         return id;
     }
 
-    public RoomType getRoomType() {
-        return roomType;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public Date getFrom() {

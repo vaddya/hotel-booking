@@ -51,7 +51,7 @@ public class HibernateSessionFactory {
                         .build();
                 sessionFactory = configuration.buildSessionFactory(registry);
             } catch (Exception e) {
-                System.err.println(e.toString());
+                e.printStackTrace();
             }
         }
         return sessionFactory;

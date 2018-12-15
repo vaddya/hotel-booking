@@ -24,11 +24,9 @@ CREATE TABLE IF NOT EXISTS bonus_penalty_reservation (
 );
 
 ALTER TABLE IF EXISTS "user"
-    ADD COLUMN city_id INTEGER;
-ALTER TABLE IF EXISTS "user"
+    ADD COLUMN city_id INTEGER,
     ADD FOREIGN KEY (city_id) REFERENCES city (id);
 
 ALTER TABLE IF EXISTS hotel
-    ADD COLUMN city_id INTEGER;
-ALTER TABLE IF EXISTS hotel
+    ADD COLUMN city_id INTEGER,
     ADD FOREIGN KEY (city_id) REFERENCES city (id);

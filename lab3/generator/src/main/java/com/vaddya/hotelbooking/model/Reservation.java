@@ -24,7 +24,7 @@ import org.hibernate.annotations.ColumnTransformer;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "reservation_id_seq")
     private Long id;
 
     @ManyToOne

@@ -21,7 +21,6 @@
 \usepackage{color}
 \usepackage{enumitem}
 \usepackage{cmap}
-\usepackage{underscore}
 
 \definecolor{green}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -37,7 +36,7 @@
 	keywordstyle=\color{blue},
 	numberstyle=\scriptsize\color{gray},
 	stringstyle=\color{purple},
-	basicstyle=\ttfamily\small,
+	basicstyle=\ttfamily\footnotesize,
 	breakatwhitespace=false,
 	breaklines=true,
 	captionpos=b,
@@ -61,7 +60,7 @@
 \renewcommand{\epsilon}{\ensuremath{\varepsilon}}
 \renewcommand{\phi}{\ensuremath{\varphi}}
 \renewcommand{\thefigure}{\arabic{figure}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\lstinline|#1|}
 \newcommand{\caret}{\^{}}
 
 \titleformat*{\section}{\large\bfseries} 

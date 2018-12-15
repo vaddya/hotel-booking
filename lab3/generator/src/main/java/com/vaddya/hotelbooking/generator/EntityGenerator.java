@@ -1,10 +1,12 @@
 package com.vaddya.hotelbooking.generator;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import com.github.javafaker.Faker;
 import com.vaddya.hotelbooking.model.BonusPenalty;
@@ -116,7 +118,7 @@ public class EntityGenerator {
         return price(cal.getTime());
     }
 
-    public static Price price(Date from) {
+    private static Price price(Date from) {
         Date randomTo = faker.date().future(365, TimeUnit.DAYS, from);
         return new Price(
                 DateUtils.toSqlDate(from),
@@ -146,22 +148,22 @@ public class EntityGenerator {
         );
     }
 
-    public static Room room(RoomType roomType) {
+    public static Room room(Hotel hotel, RoomType roomType, Set<Facility> facilities, Set<Price> prices) {
         return new Room(
+                hotel,
                 roomType,
-                faker.book().title()
+                faker.book().title(),
+                facilities,
+                prices
         );
     }
 
-    public static RoomType roomType(Hotel hotel, Set<Facility> facilities) {
-        Constants.RoomTypeInfo roomType = RandomUtils.random(Constants.roomTypes);
-        return new RoomType(
-                hotel,
-                roomType.getType(),
-                roomType.getCapacity(),
-                roomType.getDescription(),
-                facilities
-        );
+    public static Set<RoomType> roomTypes() {
+        return Arrays.stream(Constants.roomTypes).map(info -> new RoomType(
+                info.getType(),
+                info.getCapacity(),
+                info.getDescription()
+        )).collect(Collectors.toSet());
     }
 
     public static User user(City city) {
