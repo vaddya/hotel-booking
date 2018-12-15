@@ -1,0 +1,10 @@
+CREATE FUNCTION
+        hotel_name         |  city_name   |   country_name    
+---------------------------+--------------+-------------------
+ Jenkins Inc               | Dortmund     | Republic of Korea
+ Emard Inc                 | Ekaterinburg | Russia
+ Kulas LLC                 | Paris        | France
+ Wisoky, Wisoky and Wisoky | Kiev         | Ukraine
+ Homenick-Homenick         | Miami        | USA
+(5 rows)
+

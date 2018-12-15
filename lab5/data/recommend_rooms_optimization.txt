@@ -1,0 +1,14 @@
+CREATE FUNCTION
+ room_type_id | ratio | increase | decrease 
+--------------+-------+----------+----------
+            1 |    23 | t        | f
+            2 |    16 | f        | t
+            3 |    18 | f        | t
+            4 |    19 | f        | f
+            5 |    19 | f        | f
+            6 |    20 | f        | f
+            7 |    21 | f        | f
+            8 |    20 | f        | f
+            9 |    19 | f        | f
+(9 rows)
+
