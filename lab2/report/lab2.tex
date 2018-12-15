@@ -23,6 +23,7 @@
 \section{Теоретическая информация}
 
 \textbf{Язык SQL} (Structured Query Language) -- язык структурированных запросов. Он позволяет формировать весьма сложные запросы к базам данных. В SQL определены два подмножества языка:
+
 \begin{itemize}
 	\item \textbf{SQL-DDL} (Data Definition Language) -- язык определения структур и ограничений целостности баз данных. Сюда относятся команды создания и удаления баз данных; создания, изменения и удаления таблиц; управления пользователями и т.д.
 	\item \textbf{SQL-DML} (Data Manipulation Language) -- язык манипулирования данными: добавление, изменение, удаление и извлечение данных, управления транзакциями. Функции SQL-DML определяются первым словом в предложении (часто называемом запросом), которое является глаголом: \code{SELECT} (<<выбрать>>), \code{INSERT} (<<вставить>>), \code{UPDATE} (<<обновить>>), и \code{DELETE} (<<удалить>>). 
@@ -34,7 +35,7 @@
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{../../lab1/pics/scheme}
+	\includegraphics[width=\linewidth]{V1__create}
 	\caption{Структура базы данных}
 \end{figure}
 
@@ -49,12 +50,14 @@
 \subsection{Изменение структуры базы данных}
 
 По заданию преподавателя схема БД была изменена для удовлетворения следующим требованиям:
+
 \begin{itemize}
 	\item Добавить связь со странами и городами
 	\item Добавить учет бонусов и штрафов с учетом условий бронирования
 \end{itemize}
 
 Были добавлены следующие таблицы:
+
 \begin{itemize}
 	\item \code{country} -- хранит 3-символьный код \code{id} и название \code{name} страны.
 	
@@ -67,7 +70,7 @@
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{alter}
+	\includegraphics[width=\linewidth]{V2__alter}
 	\caption{Структура базы данных}
 \end{figure}
 

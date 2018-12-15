@@ -21,6 +21,7 @@
 \usepackage{color}
 \usepackage{enumitem}
 \usepackage{cmap}
+\usepackage{listingsutf8}
 
 \definecolor{green}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -34,9 +35,9 @@
 	backgroundcolor=\color{white},
 	commentstyle=\color{green},
 	keywordstyle=\color{blue},
-	numberstyle=\scriptsize\color{gray},
+	numberstyle=\color{gray}\scriptsize\ttfamily,
 	stringstyle=\color{purple},
-	basicstyle=\ttfamily\footnotesize,
+	basicstyle=\lst@ifdisplaystyle\footnotesize\fi\ttfamily,
 	breakatwhitespace=false,
 	breaklines=true,
 	captionpos=b,
@@ -47,10 +48,13 @@
 	showstringspaces=false,
 	showtabs=false,
 	tabsize=4,
-	texcl=true,
-	extendedchars=false,
 	frame=single,
-	morekeywords={IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES}
+	morekeywords={IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES},
+	deletekeywords={count, error},
+	morecomment=[l][\color{green}]{\$\$},
+	sensitive=true,
+	columns=fullflexible,
+	inputencoding=utf8/cp1251
 }
 
 \renewcommand{\le}{\ensuremath{\leqslant}}
@@ -75,11 +79,11 @@
 \newcommand{\sign}[1][5cm]{\makebox[#1]{\hrulefill}}
 \newcommand{\equipollence}{\quad\Leftrightarrow\quad}
 \newcommand{\no}[1]{\overline{#1}}
-\graphicspath{{../pics/}}
+\graphicspath{{../../migrations/}}
 \captionsetup{justification=centering,margin=1cm}
 \def\arraystretch{1.3}
 \setlength\parindent{5ex}
 \titlelabel{\thetitle.\quad}
 
-\setitemize{topsep=0.5em, itemsep=0em}
-\setenumerate{topsep=0.5em, itemsep=0em}
+\setitemize{topsep=0em, itemsep=0em}
+\setenumerate{topsep=0em, itemsep=0em}

@@ -21,7 +21,6 @@
 \usepackage{color}
 \usepackage{enumitem}
 \usepackage{cmap}
-\usepackage{underscore}
 \usepackage{pgfplotstable}
 \usepackage{listingsutf8}
 
@@ -39,7 +38,7 @@
 	keywordstyle=\color{blue},
 	numberstyle=\color{gray}\scriptsize\ttfamily,
 	stringstyle=\color{purple},
-	basicstyle=\footnotesize\ttfamily,
+	basicstyle=\lst@ifdisplaystyle\footnotesize\fi\ttfamily,
 	breakatwhitespace=false,
 	breaklines=true,
 	captionpos=b,
@@ -66,7 +65,7 @@
 \renewcommand{\epsilon}{\ensuremath{\varepsilon}}
 \renewcommand{\phi}{\ensuremath{\varphi}}
 \renewcommand{\thefigure}{\arabic{figure}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\lstinline{#1}}
 \newcommand{\caret}{\^{}}
 \newcommand{\sql}[1]{
 	\lstinputlisting[caption=\code{#1.sql}]{sql/#1.sql}

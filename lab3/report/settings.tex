@@ -22,6 +22,7 @@
 \usepackage{enumitem}
 \usepackage{cmap}
 \usepackage{underscore}
+\usepackage{listingsutf8}
 
 \definecolor{green}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -35,9 +36,9 @@
 	backgroundcolor=\color{white},
 	commentstyle=\color{green},
 	keywordstyle=\color{blue},
-	numberstyle=\scriptsize\color{gray},
+	numberstyle=\color{gray}\scriptsize\ttfamily,
 	stringstyle=\color{purple},
-	basicstyle=\ttfamily\small,
+	basicstyle=\lst@ifdisplaystyle\footnotesize\fi\ttfamily,
 	breakatwhitespace=false,
 	breaklines=true,
 	captionpos=b,
@@ -48,10 +49,13 @@
 	showstringspaces=false,
 	showtabs=false,
 	tabsize=4,
-	texcl=true,
-	extendedchars=false,
 	frame=single,
-	morekeywords={IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES}
+	morekeywords={WITH, IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES, COUNT, SUM, OVER, AVG, PARTITION, FUNCTION, LANGUAGE, BEGIN, RETURNS, REPLACE},
+	deletekeywords={count, error},
+	morecomment=[l][\color{green}]{\$\$},
+	sensitive=true,
+	columns=fullflexible,
+	inputencoding=utf8/cp1251
 }
 
 \renewcommand{\le}{\ensuremath{\leqslant}}
@@ -61,7 +65,7 @@
 \renewcommand{\epsilon}{\ensuremath{\varepsilon}}
 \renewcommand{\phi}{\ensuremath{\varphi}}
 \renewcommand{\thefigure}{\arabic{figure}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\lstinline{#1}}
 \newcommand{\caret}{\^{}}
 
 \titleformat*{\section}{\large\bfseries} 

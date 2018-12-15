@@ -78,37 +78,37 @@ ORM является еще одним уровнем абстракции, по
 
 Для каждого из способов можно указать только \code{-n,--number} -- базовое число, относительно котрого будет автоматически выбрано соответствующее число элементов той или иной сущности. При этом если не указать его или число генерируемых данных, то будет использовано значение по умолчанию.
 
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesize, deletekeywords={default}]
-usage: generator [-?] [-a] [-b <arg>] [-c <arg>] [-f <arg>] [-g <arg>] 
-[-h <arg>] [-i <arg>] [-l <arg>] [--max-bp <arg>] [--max-facilities <arg>] 
-[--min-bp <arg>] [--min-facilities <arg>] [-n <arg>] [-o <arg>] [-p <arg>] 
-[-r <arg>] [-s <arg>] [-t <arg>] [-u <arg>] [-v <arg>] [-w <arg>]
+\begin{lstlisting}[language=none]
+usage: generator [-?] [-a] [-b <arg>] [-c <arg>] [-f <arg>] [-g] [-h <arg>] 
+[-i <arg>] [-l <arg>] [--max-bp <arg>] [--max-facilities <arg>] 
+[--min-bp <arg>] [--min-facilities <arg>] [-n <arg>] [-o <arg>] 
+[-p] [-r <arg>] [-s <arg>] [-t] [-u <arg>] [-v <arg>] [-w <arg>]
 	-?,--help                    print help
 	-a,--all                     generate all entities
-	-b,--bonus-penalties <arg>   number of bonus or penalties, default: 20
+	-b,--bonus-penalties <arg>   number of bonuses or penalties, default: 20
 	-c,--cluster <arg>           cluster type: [city | hotel | reservation]
 	-f,--facilities <arg>        number of facilities, default: 100
-	-g,--guests <arg>            number of guests, default: 20000
-	-h,--hotels <arg>            number of hotels, default: 500
-	-i,--cities <arg>            number of cities, default: 200
-	-l,--cancellations <arg>     number of cancellations, default: 5000
-		--max-bp <arg>            maximum number of bonuses or penalties per
-			reservation, default: 3
-		--max-facilities <arg>    maximum number of facilities per room,
-			default 30
-		--min-bp <arg>            minimum number of bonuses or penalties per
-			reservation, default: 0
-		--min-facilities <arg>    minimum number of facilities per room,
-			default 10
+	-g,--guests                  generate guests
+	-h,--hotels <arg>            number of hotels, default: 50
+	-i,--cities <arg>            number of cities, default: 100
+	-l,--cancellations <arg>     number of cancellations, default: 100
+	--max-bp <arg>               maximum number of bonuses or penalties per
+		reservation, default: 2
+	--max-facilities <arg>       maximum number of facilities per room,
+		default 30
+	--min-bp <arg>               minimum number of bonuses or penalties per
+		reservation, default: 0
+	--min-facilities <arg>       minimum number of facilities per room,
+		default 10
 	-n,--number <arg>            base number of cluster, default 1000
 	-o,--counties <arg>          number of countries, default: 10
-	-p,--prices <arg>            number of prices, default: 10000
-	-r,--rooms <arg>             number of rooms, default: 5000
+	-p,--prices                  generate prices for room types
+	-r,--rooms <arg>             number of rooms, default: 1000
 	-s,--house-rules <arg>       number of house rules, default: 250
-	-t,--room-types <arg>        number of room types, default: 500
+	-t,--room-types              generate room types
 	-u,--users <arg>             number of users, default: 5000
-	-v,--reservations <arg>      number of reservations, default: 10000
-	-w,--reviews <arg>           number of reviews, default: 3000
+	-v,--reservations <arg>      number of reservations, default: 50000
+	-w,--reviews <arg>           number of reviews, default: 20000
 \end{lstlisting}
 
 В классе \code{Generator} производится анализ аргументов командой строки, после чего с помощью \code{EntityGenerator} происходит генерирование нужного количества сущностей каждого типа, которые вставляются в базу данных при помощи DAO классов.
