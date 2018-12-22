@@ -9,5 +9,6 @@
 *.dvi
 .idea
 target
+.gradle
 *.iml
 *.properties

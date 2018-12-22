@@ -99,7 +99,7 @@ public class Generator {
                 generateRoomTypes(session);
             }
             if (options.hasRooms() || options.hasAllOption()) {
-                generateRooms(session, options.getRooms(), options.getMinFacilities(), options.getMaxFacilities(), options.hasPrices());
+                generateRooms(session, options.getRooms(), options.getMinFacilities(), options.getMaxFacilities(), options.hasPrices() || options.hasAllOption());
             }
             if (options.hasUsers() || options.hasAllOption()) {
                 generateUsers(session, options.getUsers());
@@ -108,7 +108,7 @@ public class Generator {
                 generateBonusPenalties(session, options.getBonusPenalties());
             }
             if (options.hasReservations() || options.hasAllOption()) {
-                generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties(), options.hasGuests());
+                generateReservations(session, options.getReservations(), options.getMinBonusPenalties(), options.getMaxBonusPenalties(), options.hasGuests() || options.hasAllOption());
             }
             if (options.hasCancellations() || options.hasAllOption()) {
                 generateCancellations(session, options.getCancellation());
@@ -292,12 +292,16 @@ public class Generator {
             var prices = new HashSet<Price>();
             if (genPrices) {
                 var price = EntityGenerator.initialPrice();
+                prices.add(price);
                 while (price.getTo().before(EntityGenerator.systemTo)) {
                     price = EntityGenerator.nextPrice(price);
                     prices.add(price);
                 }
             }
             var room = EntityGenerator.room(hotel, roomType, facility, prices);
+            for (var price : prices) {
+                price.setRoom(room);
+            }
             roomDao.insert(room);
         }
         log("done with rooms");
